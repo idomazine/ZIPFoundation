@@ -72,7 +72,9 @@ extension Data {
             if !skipCRC32 {
                 checksum = data.crc32(checksum: checksum)
             }
-            bytesRead += Int64(chunkSize)
+            // Stop when the provider runs out of data before the recorded size is reached.
+            guard data.count > 0 else { break }
+            bytesRead += Int64(data.count)
         }
         return checksum
     }
